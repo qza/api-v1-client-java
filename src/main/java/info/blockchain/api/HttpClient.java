@@ -13,16 +13,26 @@ import java.util.Map.Entry;
  * implementation via setCustomHttpClient(...), such that it will get used globally.
  */
 public class HttpClient implements HttpClientInterface {
-    private static final String BASE_URL = "https://blockchain.info/";
+    private static final String DEFAULT_BASE_URL = "http://localhost:3000/";
+    private static final String TRANSACTIONS_BASE_URL = "https://blockchain.info/";
 
     public volatile static int TIMEOUT_MS = 10000;
+    
+    private static String baseUrl;
 
     private static HttpClientInterface instance;
 
-    public static HttpClientInterface getInstance () {
+    public static HttpClientInterface getInstance (boolean... useTransactionsUrl) {
         if (instance == null) {
             instance = new HttpClient();
         }
+        if((useTransactionsUrl.length > 0) && (useTransactionsUrl[0])) {
+        	baseUrl = TRANSACTIONS_BASE_URL;
+        }
+        else {
+        	baseUrl = DEFAULT_BASE_URL;
+        }
+        
         return instance;
     }
 
@@ -64,13 +74,13 @@ public class HttpClient implements HttpClientInterface {
 
         if (requestMethod.equals("GET")) {
             if(encodedParams.isEmpty()) {
-                url = new URL(BASE_URL + resource);
+                url = new URL(baseUrl + resource);
             }
             else {
-                url = new URL(BASE_URL + resource + '?' + encodedParams);
+                url = new URL(baseUrl + resource + '?' + encodedParams);
             }            
         } else if (requestMethod.equals("POST")) {
-            url = new URL(BASE_URL + resource);
+            url = new URL(baseUrl + resource);
         }
 
         HttpURLConnection conn = null;

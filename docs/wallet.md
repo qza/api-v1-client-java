@@ -15,6 +15,11 @@ public class App
     {	
     	Wallet wallet = new Wallet("18d4cf81-fcec-4a94-aa93-202a25085c0e", "yourPassword123");
     	
+    	wallet.setApiCode("1770d5d9-bcea-4d28-ad21-6cbd5be018a8");
+    	
+    	// login to the wallet before making any other call
+    	wallet.login();
+    	
     	// get an address from your wallet and include only transactions with up to 3
     	// confirmations in the balance
     	Address addr = wallet.getAddress("1JzSZFs2DQke2B3S4pBxaNaMzzVZaG4Cqh", 3);

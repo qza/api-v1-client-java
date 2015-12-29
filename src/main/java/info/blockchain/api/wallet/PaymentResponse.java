@@ -7,11 +7,16 @@ public class PaymentResponse {
     private String message;
     private String txHash;
     private String notice;
+    private boolean success;
 
     public PaymentResponse (String message, String txHash, String notice) {
         this.message = message;
         this.txHash = txHash;
         this.notice = notice;
+    }
+    
+    public PaymentResponse (boolean success) {
+        this.success = success;
     }
 
     @Override
@@ -47,4 +52,10 @@ public class PaymentResponse {
         return notice;
     }
 
+    /**
+     * @return payment status from the server
+     */
+    public boolean getSuccess () {
+        return success;
+    }
 }

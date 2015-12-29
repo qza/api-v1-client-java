@@ -67,6 +67,23 @@ public class Wallet {
     public int hashCode () {
         return identifier != null ? identifier.hashCode() : 0;
     }
+    
+    /**
+     * Logs in to the wallet specified by {@link #identifier}
+     *
+     * @return login status from the server
+     * @throws APIException If the server returns an error
+     */
+    public boolean login () throws APIException, IOException {
+    	Map<String, String> params = buildBasicRequest();
+        if (apiCode != null) {
+            params.put("api_code", apiCode);
+        }
+        String response = HttpClient.getInstance().get(String.format("merchant/%s/login", identifier), params);
+        JsonObject topElem = parseResponse(response);
+
+        return topElem.get("success").getAsBoolean();
+    }
 
     /**
      * Sends bitcoin from your wallet to a single address.
@@ -120,10 +137,10 @@ public class Wallet {
             params.put("note", note);
         }
 
-        String response = HttpClient.getInstance().post(String.format("merchant/%s/%s", identifier, method), params);
+        String response = HttpClient.getInstance().get(String.format("merchant/%s/%s", identifier, method), params);
         JsonObject topElem = parseResponse(response);
 
-        return new PaymentResponse(topElem.get("message").getAsString(), topElem.get("tx_hash").getAsString(), topElem.has("notice") ? topElem.get("notice").getAsString() : null);
+        return new PaymentResponse(topElem.get("success").getAsBoolean());
     }
 
     /**
@@ -269,9 +286,6 @@ public class Wallet {
         if (secondPassword != null) {
             params.put("second_password", secondPassword);
         }
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
 
         return params;
     }
@@ -290,5 +304,12 @@ public class Wallet {
      */
     public void setApiCode (String apiCode) {
         this.apiCode = apiCode;
+    }
+    
+    /**
+     * Gets the wallet identifier (GUID)
+     */
+    public String getIdentifier () {
+        return identifier;
     }
 }

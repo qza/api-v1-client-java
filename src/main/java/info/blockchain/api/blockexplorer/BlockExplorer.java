@@ -50,7 +50,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Transaction getTransaction (String txHash) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawtx/" + txHash + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance(true).get("rawtx/" + txHash + "?api_code=" + apiCode, null);
         JsonObject txJson = new JsonParser().parse(response).getAsJsonObject();
         return new Transaction(txJson);
     }
@@ -74,7 +74,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Block getBlock (String blockHash) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawblock/" + blockHash + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance(true).get("rawblock/" + blockHash + "?api_code=" + apiCode, null);
         JsonObject blockJson = new JsonParser().parse(response).getAsJsonObject();
         return new Block(blockJson);
     }
@@ -87,7 +87,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public Address getAddress (String address) throws APIException, IOException {
-        String response = HttpClient.getInstance().get("rawaddr/" + address + "?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance(true).get("rawaddr/" + address + "?api_code=" + apiCode, null);
         JsonObject addrJson = new JsonParser().parse(response).getAsJsonObject();
         return new Address(addrJson);
     }
@@ -109,7 +109,7 @@ public class BlockExplorer {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("block-height/" + height, params);
+        String response = HttpClient.getInstance(true).get("block-height/" + height, params);
         JsonObject blocksJson = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement blockElem : blocksJson.get("blocks").getAsJsonArray()) {
@@ -137,7 +137,7 @@ public class BlockExplorer {
 
         String response = null;
         try {
-            response = HttpClient.getInstance().get("unspent", params);
+            response = HttpClient.getInstance(true).get("unspent", params);
         } catch (APIException e) {
             // the API isn't supposed to return an error code here. No free outputs is
             // a legitimate situation. We are circumventing that by returning an empty list
@@ -164,7 +164,7 @@ public class BlockExplorer {
      * @throws APIException If the server returns an error
      */
     public LatestBlock getLatestBlock () throws APIException, IOException {
-        String response = HttpClient.getInstance().get("latestblock?api_code=" + apiCode, null);
+        String response = HttpClient.getInstance(true).get("latestblock?api_code=" + apiCode, null);
         JsonObject blockObj = new JsonParser().parse(response).getAsJsonObject();
         return new LatestBlock(blockObj);
     }
@@ -184,7 +184,7 @@ public class BlockExplorer {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("unconfirmed-transactions", params);
+        String response = HttpClient.getInstance(true).get("unconfirmed-transactions", params);
         JsonObject txList = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement txElem : txList.get("txs").getAsJsonArray()) {
@@ -233,7 +233,7 @@ public class BlockExplorer {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("blocks/" + poolName, params);
+        String response = HttpClient.getInstance(true).get("blocks/" + poolName, params);
         JsonObject blockList = new JsonParser().parse(response).getAsJsonObject();
 
         for (JsonElement blockElem : blockList.get("blocks").getAsJsonArray()) {
@@ -257,7 +257,7 @@ public class BlockExplorer {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("inv/" + hash, params);
+        String response = HttpClient.getInstance(true).get("inv/" + hash, params);
         JsonObject invObj = new JsonParser().parse(response).getAsJsonObject();
         return new InventoryData(invObj);
     }
