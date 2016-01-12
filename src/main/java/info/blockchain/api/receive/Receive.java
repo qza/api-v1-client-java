@@ -46,7 +46,7 @@ public class Receive {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().post("api/receive", params);
+        String response = HttpClient.getInstance(true).post("api/receive", params);
         JsonParser parser = new JsonParser();
         JsonObject obj = parser.parse(response).getAsJsonObject();
 

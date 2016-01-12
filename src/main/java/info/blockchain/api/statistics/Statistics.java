@@ -36,7 +36,7 @@ public class Statistics {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("stats", params);
+        String response = HttpClient.getInstance(true).get("stats", params);
         return new StatisticsResponse(response);
     }
 }

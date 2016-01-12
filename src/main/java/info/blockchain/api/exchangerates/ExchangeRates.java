@@ -43,7 +43,7 @@ public class ExchangeRates {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("ticker", params);
+        String response = HttpClient.getInstance(true).get("ticker", params);
         JsonObject ticker = new JsonParser().parse(response).getAsJsonObject();
 
         Map<String, Currency> resultMap = new HashMap<String, Currency>();
@@ -86,7 +86,7 @@ public class ExchangeRates {
             params.put("api_code", apiCode);
         }
 
-        String response = HttpClient.getInstance().get("tobtc", params);
+        String response = HttpClient.getInstance(true).get("tobtc", params);
         return new BigDecimal(response);
     }
 }

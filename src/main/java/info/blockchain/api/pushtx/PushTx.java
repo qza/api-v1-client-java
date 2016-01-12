@@ -38,6 +38,6 @@ public class PushTx {
             params.put("api_code", apiCode);
         }
 
-        HttpClient.getInstance().post("pushtx", params);
+        HttpClient.getInstance(true).post("pushtx", params);
     }
 }
