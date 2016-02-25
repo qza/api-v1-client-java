@@ -54,9 +54,9 @@ public class CreateWallet {
             params.put("email", email);
         }
 
-        String response = HttpClient.getInstance(true).post("api/v2/create_wallet", params);
+        String response = HttpClient.getInstance().post("v2/create", params);
         JsonObject jsonObj = new JsonParser().parse(response).getAsJsonObject();
 
-        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("link").getAsString());
+        return new CreateWalletResponse(jsonObj.get("guid").getAsString(), jsonObj.get("address").getAsString(), jsonObj.get("label").getAsString());
     }
 }
