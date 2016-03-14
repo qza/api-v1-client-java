@@ -115,6 +115,9 @@ public class Wallet {
      */
     public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
+        if (apiCode != null) {
+            params.put("api_code", apiCode);
+        }
         String method = null;
 
         if (recipients.size() == 1) {
@@ -151,7 +154,12 @@ public class Wallet {
      * @throws APIException If the server returns an error
      */
     public long getBalance () throws APIException, IOException {
-        String response = HttpClient.getInstance().get(String.format("merchant/%s/balance", identifier), buildBasicRequest());
+    	Map<String, String> params = buildBasicRequest();
+    	if (apiCode != null) {
+            params.put("api_code", apiCode);
+        }
+        
+        String response = HttpClient.getInstance().get(String.format("merchant/%s/balance", identifier), params);
         JsonObject topElem = parseResponse(response);
 
         return topElem.get("balance").getAsLong();
