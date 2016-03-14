@@ -76,9 +76,7 @@ public class Wallet {
      */
     public boolean login () throws APIException, IOException {
     	Map<String, String> params = buildBasicRequest();
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
+        
         String response = HttpClient.getInstance().get(String.format("merchant/%s/login", identifier), params);
         JsonObject topElem = parseResponse(response);
 
@@ -115,9 +113,6 @@ public class Wallet {
      */
     public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
-        if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
         String method = null;
 
         if (recipients.size() == 1) {
@@ -154,10 +149,7 @@ public class Wallet {
      * @throws APIException If the server returns an error
      */
     public long getBalance () throws APIException, IOException {
-    	Map<String, String> params = buildBasicRequest();
-    	if (apiCode != null) {
-            params.put("api_code", apiCode);
-        }
+    	Map<String, String> params = buildBasicRequest();    	
         
         String response = HttpClient.getInstance().get(String.format("merchant/%s/balance", identifier), params);
         JsonObject topElem = parseResponse(response);
@@ -293,6 +285,9 @@ public class Wallet {
         params.put("password", password);
         if (secondPassword != null) {
             params.put("second_password", secondPassword);
+        }
+        if (apiCode != null) {
+            params.put("api_code", apiCode);
         }
 
         return params;
