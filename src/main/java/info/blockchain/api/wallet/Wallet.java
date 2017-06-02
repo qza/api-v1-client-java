@@ -94,11 +94,11 @@ public class Wallet {
      * @return An instance of the PaymentResponse class
      * @throws APIException If the server returns an error
      */
-    public PaymentResponse send (String toAddress, long amount, String fromAddress, Long fee, String note) throws APIException, IOException {
+    public PaymentResponse send (String toAddress, long amount, String fromAddress, Long fee, boolean feePerByte, String note) throws APIException, IOException {
         Map<String, Long> recipient = new HashMap<String, Long>();
         recipient.put(toAddress, amount);
 
-        return sendMany(recipient, fromAddress, fee, note);
+        return sendMany(recipient, fromAddress, fee, feePerByte, note);
     }
 
     /**
@@ -111,7 +111,7 @@ public class Wallet {
      * @return An instance of the PaymentResponse class
      * @throws APIException If the server returns an error
      */
-    public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, String note) throws APIException, IOException {
+    public PaymentResponse sendMany (Map<String, Long> recipients, String fromAddress, Long fee, boolean feePerByte, String note) throws APIException, IOException {
         Map<String, String> params = buildBasicRequest();
         String method = null;
 
@@ -129,7 +129,7 @@ public class Wallet {
             params.put("from", fromAddress);
         }
         if (fee != null) {
-            params.put("fee", fee.toString());
+            params.put(feePerByte ? "fee_per_byte" : "fee", fee.toString());
         }
         if (note != null) {
             params.put("note", note);
